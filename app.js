@@ -80,7 +80,7 @@ function generate() {
     height: 200,
     colorDark: '#111111',
     colorLight: '#FFFFFF',
-    correctLevel: QRCode.CorrectLevel.M,
+    correctLevel: QRCode.CorrectLevel.L,
   });
 
   const sec = document.getElementById('qr-section');
