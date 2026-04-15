@@ -74,14 +74,10 @@ function generate() {
 
   const out = document.getElementById('qr-output');
   out.innerHTML = '';
-  new QRCode(out, {
-    text: vcard,
-    width: 200,
-    height: 200,
-    colorDark: '#111111',
-    colorLight: '#FFFFFF',
-    correctLevel: QRCode.CorrectLevel.L,
-  });
+  const qr = qrcode(0, 'L');
+  qr.addData(vcard);
+  qr.make();
+  out.innerHTML = qr.createImgTag(3, 4);
 
   const sec = document.getElementById('qr-section');
   sec.classList.add('visible');
