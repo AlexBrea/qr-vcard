@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>vCard QR Generator</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;400;500&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"DM Serif Display"', 'serif'],
+            sans: ['"DM Sans"', 'sans-serif'],
+          },
+          colors: {
+            ink: {
+              DEFAULT: '#111111',
+              soft: '#2a2a2a',
+              muted: '#666666',
+              faint: '#999999',
+            },
+            paper: {
+              DEFAULT: '#FAF9F6',
+              warm: '#F3F1EB',
+              card: '#FFFFFF',
+            },
+            accent: {
+              DEFAULT: '#C84B31',
+              light: '#F5E6E2',
+              dark: '#9C3520',
+            },
+          },
+          borderRadius: {
+            '2.5xl': '1.25rem',
+          },
+        },
+      },
+    }
+  </script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="min-h-screen">
+
+  <!-- Header -->
+  <header class="border-b border-paper-warm bg-paper-card sticky top-0 z-10">
+    <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.2">
+            <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
+            <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+            <path d="M14 14h3v3M17 14h3M14 17h3v3"/>
+          </svg>
+        </div>
+        <span class="font-display text-xl text-ink">vCard QR</span>
+      </div>
+      <span class="text-xs text-ink-faint tracking-widest uppercase">Generador de contacto</span>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="max-w-5xl mx-auto px-6 pt-14 pb-10">
+    <div class="max-w-xl">
+      <h1 class="text-4xl md:text-5xl text-ink leading-tight mb-4">
+        Tu contacto,<br /><em class="text-accent">en un escáner.</em>
+      </h1>
+      <p class="text-ink-muted text-base leading-relaxed">
+        Rellena los datos, genera el QR y compártelo donde quieras. Al escanearlo,
+        el móvil mostrará tu nombre y la opción de añadirte al directorio — sin apps
+        ni enlaces externos.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main -->
+  <main class="max-w-5xl mx-auto px-6 pb-20">
+    <div class="split flex gap-8 items-start">
+
+      <!-- Form -->
+      <div class="flex-1 min-w-0">
+
+        <!-- Section: Identidad -->
+        <div class="mb-8">
+          <div class="flex items-center gap-2 mb-5">
+            <span class="text-xs font-medium tracking-widest uppercase text-accent">01</span>
+            <span class="text-xs font-medium tracking-widest uppercase text-ink-muted">Identidad</span>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="field-wrap has-icon">
+              <svg class="icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <input type="text" id="fn" placeholder=" " autocomplete="given-name" />
+              <label>Nombre</label>
+            </div>
+            <div class="field-wrap">
+              <input type="text" id="ln" placeholder=" " autocomplete="family-name" />
+              <label>Apellidos</label>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-3 mt-3">
+            <div class="field-wrap">
+              <input type="text" id="title" placeholder=" " />
+              <label>Cargo / Rol</label>
+            </div>
+            <div class="field-wrap">
+              <input type="text" id="org" placeholder=" " autocomplete="organization" />
+              <label>Empresa u organización</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Contacto -->
+        <div class="mb-8">
+          <div class="flex items-center gap-2 mb-5">
+            <span class="text-xs font-medium tracking-widest uppercase text-accent">02</span>
+            <span class="text-xs font-medium tracking-widest uppercase text-ink-muted">Contacto</span>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="field-wrap has-icon">
+              <svg class="icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6c-1.1-2.69-1.6-5.61-1.48-8.45A2 2 0 0 1 5.91 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L10.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 24 16.92z"/></svg>
+              <input type="tel" id="tel" placeholder=" " autocomplete="tel" />
+              <label>Teléfono móvil</label>
+            </div>
+            <div class="field-wrap has-icon">
+              <svg class="icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="m22 3-10 9L2 3"/></svg>
+              <input type="email" id="email" placeholder=" " autocomplete="email" />
+              <label>Correo electrónico</label>
+            </div>
+            <div class="field-wrap has-icon">
+              <svg class="icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6c-1.1-2.69-1.6-5.61-1.48-8.45A2 2 0 0 1 5.91 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L10.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 24 16.92z"/></svg>
+              <input type="tel" id="tel2" placeholder=" " />
+              <label>Teléfono trabajo (opcional)</label>
+            </div>
+            <div class="field-wrap has-icon">
+              <svg class="icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6c-1.1-2.69-1.6-5.61-1.48-8.45A2 2 0 0 1 5.91 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L10.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 24 16.92z"/></svg>
+              <input type="tel" id="fax" placeholder=" " />
+              <label>Fax (opcional)</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Presencia -->
+        <div class="mb-8">
+          <div class="flex items-center gap-2 mb-5">
+            <span class="text-xs font-medium tracking-widest uppercase text-accent">03</span>
+            <span class="text-xs font-medium tracking-widest uppercase text-ink-muted">Presencia digital</span>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="field-wrap has-icon col-span-2">
+              <svg class="icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <input type="url" id="url" placeholder=" " />
+              <label>Sitio web (https://...)</label>
+            </div>
+            <div class="field-wrap has-icon">
+              <svg class="icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              <input type="text" id="linkedin" placeholder=" " />
+              <label>LinkedIn (URL o usuario)</label>
+            </div>
+            <div class="field-wrap has-icon">
+              <svg class="icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.7 5.3 4.3 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
+              <input type="text" id="twitter" placeholder=" " />
+              <label>X / Twitter (usuario)</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Dirección -->
+        <div class="mb-8">
+          <div class="flex items-center gap-2 mb-5">
+            <span class="text-xs font-medium tracking-widest uppercase text-accent">04</span>
+            <span class="text-xs font-medium tracking-widest uppercase text-ink-muted">Dirección</span>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="field-wrap col-span-2">
+              <input type="text" id="street" placeholder=" " autocomplete="street-address" />
+              <label>Calle y número</label>
+            </div>
+            <div class="field-wrap">
+              <input type="text" id="city" placeholder=" " autocomplete="address-level2" />
+              <label>Ciudad</label>
+            </div>
+            <div class="field-wrap">
+              <input type="text" id="zip" placeholder=" " autocomplete="postal-code" />
+              <label>Código postal</label>
+            </div>
+            <div class="field-wrap">
+              <input type="text" id="region" placeholder=" " autocomplete="address-level1" />
+              <label>Provincia / Comunidad</label>
+            </div>
+            <div class="field-wrap">
+              <input type="text" id="country" placeholder=" " autocomplete="country-name" />
+              <label>País</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Extras -->
+        <div class="mb-10">
+          <div class="flex items-center gap-2 mb-5">
+            <span class="text-xs font-medium tracking-widest uppercase text-accent">05</span>
+            <span class="text-xs font-medium tracking-widest uppercase text-ink-muted">Extras</span>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="field-wrap">
+              <input type="date" id="bday" placeholder=" " />
+              <label>Fecha de nacimiento</label>
+            </div>
+            <div class="field-wrap has-icon">
+              <svg class="icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <input type="text" id="note" placeholder=" " />
+              <label>Nota / Apunte</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex gap-3">
+          <button onclick="generate()"
+            class="flex-1 bg-accent hover:bg-accent-dark text-white font-medium text-sm py-3.5 rounded-xl transition-colors duration-200 flex items-center justify-center gap-2">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 14h3v3M17 14h3M14 17h3v3"/></svg>
+            Generar QR
+          </button>
+          <button onclick="clearAll()"
+            class="px-5 bg-paper-warm hover:bg-paper-card border border-paper-warm text-ink-muted text-sm font-medium py-3.5 rounded-xl transition-colors duration-200">
+            Limpiar
+          </button>
+        </div>
+
+      </div><!-- /form -->
+
+      <!-- QR Output -->
+      <div id="qr-section" class="w-80 shrink-0 sticky top-24">
+
+        <!-- QR Card -->
+        <div class="bg-paper-card border border-paper-warm rounded-2.5xl overflow-hidden shadow-sm">
+
+          <!-- Header del QR -->
+          <div class="px-5 pt-5 pb-4 border-b border-paper-warm">
+            <p class="text-xs font-medium tracking-widest uppercase text-ink-faint mb-1">Vista previa</p>
+            <div class="flex items-center gap-3">
+              <div id="avatar" class="w-10 h-10 rounded-full bg-accent-light flex items-center justify-center text-accent font-display text-base shrink-0">?</div>
+              <div>
+                <p id="preview-name" class="font-medium text-ink text-sm leading-tight">—</p>
+                <p id="preview-sub" class="text-xs text-ink-faint leading-tight mt-0.5">—</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview fields -->
+          <div id="preview-fields" class="px-5 py-3 text-xs text-ink-muted space-y-0"></div>
+
+          <!-- QR -->
+          <div class="flex flex-col items-center px-5 pt-2 pb-5 border-t border-paper-warm mt-1">
+            <div id="qr-output" class="my-4 p-3 bg-white rounded-xl border border-paper-warm inline-block"></div>
+
+            <!-- Download options -->
+            <div class="w-full space-y-2">
+              <button onclick="downloadPNG()"
+                class="w-full border border-ink/10 hover:border-accent hover:text-accent text-ink-muted text-xs font-medium py-2.5 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Descargar PNG
+              </button>
+              <button onclick="downloadVCF()"
+                class="w-full border border-ink/10 hover:border-accent hover:text-accent text-ink-muted text-xs font-medium py-2.5 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                Descargar .vcf
+              </button>
+            </div>
+          </div>
+        </div>
+
+
+      </div><!-- /qr-section -->
+
+    </div>
+  </main>
+
+
+  <script src="app.js"></script>
+</body>
+</html>

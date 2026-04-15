@@ -1,0 +1,90 @@
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: #FAF9F6;
+  color: #111111;
+}
+
+h1, h2, .font-display { font-family: 'DM Serif Display', serif; }
+
+/* Inputs */
+.field-wrap { position: relative; }
+.field-wrap label {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: #999;
+  pointer-events: none;
+  transition: all 0.18s ease;
+  background: transparent;
+}
+.field-wrap.has-icon label { left: 42px; }
+.field-wrap input:focus ~ label,
+.field-wrap input:not(:placeholder-shown) ~ label {
+  top: 8px;
+  transform: translateY(0);
+  font-size: 10px;
+  color: #C84B31;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.field-wrap input {
+  width: 100%;
+  padding: 22px 14px 8px;
+  border: 1.5px solid #E5E3DC;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  background: #fff;
+  color: #111;
+  outline: none;
+  transition: border-color 0.18s;
+}
+.field-wrap.has-icon input { padding-left: 42px; }
+.field-wrap input:focus { border-color: #C84B31; }
+.field-wrap .icon {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #bbb;
+}
+.field-wrap input:focus ~ .icon,
+.field-wrap input:not(:placeholder-shown) ~ .icon { color: #C84B31; }
+
+/* QR wrapper */
+#qr-output canvas, #qr-output img {
+  width: 200px !important;
+  height: 200px !important;
+}
+
+/* Preview card side */
+.preview-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 13px; border-bottom: 1px solid #F0EEE8; }
+.preview-row:last-child { border-bottom: none; }
+
+/* Transition */
+#qr-section {
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  opacity: 0;
+  transform: translateY(16px);
+  pointer-events: none;
+}
+#qr-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #FAF9F6; }
+::-webkit-scrollbar-thumb { background: #D5D2C8; border-radius: 3px; }
+
+@media (max-width: 768px) {
+  .split { flex-direction: column !important; }
+}
