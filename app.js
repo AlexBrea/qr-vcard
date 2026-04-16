@@ -106,6 +106,21 @@ function downloadPNG() {
   }
 }
 
+function downloadSVG() {
+  if (!lastVcard) { alert('Genera el QR primero.'); return; }
+  const fn = [v('fn'), v('ln')].filter(Boolean).join('_') || 'contacto';
+  const qr = qrcode(0, 'L');
+  qr.addData(lastVcard);
+  qr.make();
+  const svg = qr.createSvgTag({ scalable: true });
+  const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `qr_${fn}.svg`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
 function downloadVCF() {
   if (!lastVcard) { alert('Genera el QR primero.'); return; }
   const fn = [v('fn'), v('ln')].filter(Boolean).join('_') || 'contacto';
